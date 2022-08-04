@@ -10,4 +10,8 @@ libraries:
 
 softdepend: [ AuthMe, BanManager, BungeeChatAPI, CMI, DiscordSRV, Factions, Feudal, ItemsAdder, Essentials, LegacyFactions, Lands, LuckPerms, Multiverse-Core, MVdWPlaceholderAPI, MythicMobs, mcMMO, Nicky, PlaceholderAPI, ProtocolLib, SimpleClans, Towny, TownyChat, Vault, WorldEdit ]
 
-commands:  
+commands:
+
+permissions:
+  flightarmor.getset:
+    default: op

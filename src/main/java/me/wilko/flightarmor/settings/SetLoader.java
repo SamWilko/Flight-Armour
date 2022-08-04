@@ -34,7 +34,7 @@ public class SetLoader extends YamlStaticConfig {
 			// Goes through helmet, chestplate, leggings, and boots section
 			for (ArmorPiece.Type type : ArmorPiece.Type.values()) {
 
-				setPathPrefix("tier-one." + type.name().toLowerCase());
+				setPathPrefix((tier == ArmorSet.Tier.ONE ? "tier-one." : "tier-two.") + type.name().toLowerCase());
 
 				// Create this new piece
 				ArmorPiece piece = new ArmorPiece(

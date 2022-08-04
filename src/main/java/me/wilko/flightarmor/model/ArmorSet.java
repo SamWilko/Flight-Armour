@@ -73,7 +73,7 @@ public class ArmorSet {
 				boots
 		);
 	}
-
+	
 	/**
 	 * Returns the armor set corresponding to the given set
 	 *
