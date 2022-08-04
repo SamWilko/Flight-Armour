@@ -1,0 +1,116 @@
+tier-one:
+
+  type: chainmail
+  glow: false
+
+  helmet:
+    name: "&bTier 1 Helmet"
+    lore:
+      - "&9This is a helmet"
+      - "&9It protects the head!"
+
+  chestplate:
+    name: "&bTier 1 Chestplate"
+    lore:
+      - "&9This is a chestplate"
+      - "&9It protects the torso!"
+
+  leggings:
+    name: "&bTier 1 Leggings"
+    lore:
+      - "&9These are leggings"
+      - "&9They protect the legs!"
+
+  boots:
+    name: "&bTier 1 Boots"
+    lore:
+      - "&9These are boots"
+      - "&9They protect the feet!"
+
+  recipe:
+    top-left:
+      item-material: netherite_block
+      amount: 2
+    top-middle:
+      item-material: nether_star
+      amount: 2
+    top-right:
+      item-material: netherite_block
+      amount: 2
+    middle-left:
+      item-material: nether_star
+      amount: 2
+    middle:
+      item-material: ARMOR
+      amount: 1
+    middle-right:
+      item-material: nether_star
+      amount: 2
+    bottom-left:
+      item-material: netherite_block
+      amount: 2
+    bottom-middle:
+      item-material: nether_star
+      amount: 2
+    bottom-right:
+      item-material: netherite_block
+      amount: 2
+
+tier-two:
+
+  type: chainmail
+  glow: true
+
+  helmet:
+    name: "&bTier 2 Helmet"
+    lore:
+      - "&9This is a helmet"
+      - "&9It protects the head!"
+
+  chestplate:
+    name: "&bTier 2 Chestplate"
+    lore:
+      - "&9This is a chestplate"
+      - "&9It protects the torso!"
+
+  leggings:
+    name: "&bTier 2 Leggings"
+    lore:
+      - "&9These are leggings"
+      - "&9They protect the legs!"
+
+  boots:
+    name: "&bTier 2 Boots"
+    lore:
+      - "&9These are boots"
+      - "&9They protect the feet!"
+
+  recipe:
+    top-left:
+      item-material: netherite_block
+      amount: 8
+    top-middle:
+      item-material: nether_star
+      amount: 8
+    top-right:
+      item-material: netherite_block
+      amount: 8
+    middle-left:
+      item-material: nether_star
+      amount: 8
+    middle:
+      item-material: ARMOR
+      amount: 1
+    middle-right:
+      item-material: nether_star
+      amount: 8
+    bottom-left:
+      item-material: netherite_block
+      amount: 8
+    bottom-middle:
+      item-material: nether_star
+      amount: 8
+    bottom-right:
+      item-material: netherite_block
+      amount: 8
+
