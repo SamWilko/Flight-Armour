@@ -6,7 +6,6 @@ public final class FlightArmor extends SimplePlugin {
 
 	@Override
 	protected void onPluginStart() {
-
 	}
 
 	@Override

@@ -3,11 +3,13 @@ package me.wilko.flightarmor.settings;
 import me.wilko.flightarmor.model.ArmorPiece;
 import me.wilko.flightarmor.model.ArmorSet;
 import me.wilko.flightarmor.recipe.ArmorRecipe;
-import me.wilko.flightarmor.recipe.Matrix;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.mineacademy.fo.menu.model.ItemCreator;
 import org.mineacademy.fo.remain.CompMaterial;
 import org.mineacademy.fo.settings.YamlStaticConfig;
+
+import java.util.List;
 
 public class SetLoader extends YamlStaticConfig {
 
@@ -24,7 +26,7 @@ public class SetLoader extends YamlStaticConfig {
 			setPathPrefix(tierIndex == 1 ? "tier-one" : "tier-two");
 
 			// Gets the armor material for this set
-			ArmorPiece.Material setMaterial = ArmorPiece.Material.valueOf(getString("type").toUpperCase());
+			ArmorPiece.Material setMaterial = ArmorPiece.Material.CHAINMAIL;
 
 			ArmorSet armorSet = new ArmorSet(tier, setMaterial);
 
@@ -49,42 +51,42 @@ public class SetLoader extends YamlStaticConfig {
 				piece.setBelongingSet(armorSet);
 
 				// Creates the recipe for this piece
-				Matrix matrix = new Matrix();
-				for (Matrix.Position position : Matrix.Position.values()) {
-					setPathPrefix((tierIndex == 1 ? "tier-one" : "tier-two") + ".recipe." + position.name().toLowerCase().replace('_', '-'));
+				setPathPrefix((tier == ArmorSet.Tier.ONE ? "tier-one." : "tier-two.") + "recipe");
 
-					String materialString = getString("item-material");
+				ArmorRecipe recipe = new ArmorRecipe(piece.build());
 
-					if (materialString.equalsIgnoreCase("armor")) {
+				// Sets the shape for the recipe
+				List<String> shapeList = getStringList("shape");
+				recipe.shape(shapeList.get(0), shapeList.get(1), shapeList.get(2));
 
-						ItemStack item;
+				// Load variables
+				for (String key : getMap("variables").keySet()) {
 
-						// If we're currently going through tier 1, set the armor ingredient to just a vanilla armor piece
-						if (tier == ArmorSet.Tier.ONE) {
-							item = ItemCreator.of(
-									CompMaterial.valueOf(String.join("_", setMaterial.name(), type.name()).toUpperCase()
-									)).make();
+					ItemStack item = ItemCreator.of(CompMaterial.fromMaterial(Material.valueOf(getString("variables." + key + ".material").toUpperCase())))
+							.amount(getInteger("variables." + key + ".amount")).make();
 
-							// If it's tier 2, then set the armor ingredient to the tier 1 equivalence of the type	
-						} else
-							item = ArmorSet.getPiece(ArmorSet.getFirstTier(), type).build();
-
-						matrix.put(position, item);
-
-					} else {
-
-						CompMaterial material = CompMaterial.valueOf(materialString.toUpperCase());
-
-						matrix.put(position, ItemCreator.of(
-										material
-								)
-								.amount(getInteger("amount"))
-								.make());
-					}
+					recipe.setIngredient(key.charAt(0), item);
 				}
 
-				ArmorRecipe recipe = new ArmorRecipe(matrix, piece);
-				piece.setRecipe(recipe);
+				// Load A variable
+				ItemStack armorIngredient;
+				if (tier == ArmorSet.Tier.ONE) {
+
+					// Makes a vanilla equivalent of the piece
+					armorIngredient = ItemCreator.of(
+							CompMaterial.fromMaterial(Material.valueOf(String.join("_",
+									armorSet.getMaterial().name(), piece.getType().name())))).make();
+				} else {
+
+					armorIngredient = ArmorSet.getFirstTier().getPiece(type).build();
+				}
+
+				recipe.setIngredient('A', armorIngredient);
+
+				recipe.setMatrix();
+
+				// Add recipe
+				ArmorRecipe.addRecipe(recipe);
 			}
 
 			if (tier == ArmorSet.Tier.ONE)

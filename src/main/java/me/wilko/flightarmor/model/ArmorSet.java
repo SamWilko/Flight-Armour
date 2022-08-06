@@ -37,7 +37,6 @@ public class ArmorSet {
 	 *
 	 * @return null if no piece was found of this type, which shouldn't ever happen
 	 */
-	@Nullable
 	public ArmorPiece getPiece(ArmorPiece.Type type) {
 
 		if (type == ArmorPiece.Type.HELMET)
@@ -73,7 +72,7 @@ public class ArmorSet {
 				boots
 		);
 	}
-	
+
 	/**
 	 * Returns the armor set corresponding to the given set
 	 *
@@ -113,6 +112,8 @@ public class ArmorSet {
 	}
 
 	public enum Tier {
+
+		VANILLA,
 		ONE,
 		TWO
 	}

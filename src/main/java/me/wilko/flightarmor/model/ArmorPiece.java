@@ -1,7 +1,6 @@
 package me.wilko.flightarmor.model;
 
 import lombok.Data;
-import me.wilko.flightarmor.recipe.ArmorRecipe;
 import me.wilko.flightarmor.settings.Settings;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +13,6 @@ import java.util.List;
 
 @Data
 public class ArmorPiece {
-
 	private final Type type;
 	private final String name;
 	private final List<String> lore;
@@ -22,7 +20,13 @@ public class ArmorPiece {
 
 	private ArmorSet belongingSet;
 
-	private ArmorRecipe recipe;
+
+	public ArmorPiece(Type type, String name, List<String> lore, boolean glow) {
+		this.type = type;
+		this.name = name;
+		this.lore = lore;
+		this.glow = glow;
+	}
 
 	@Nullable
 	public ItemStack build() {

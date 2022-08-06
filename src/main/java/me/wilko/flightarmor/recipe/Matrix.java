@@ -26,7 +26,7 @@ public class Matrix {
 
 			System.out.println("craftItem: " + craftItem);
 			System.out.println("matrixItem: " + matrixItem);
-			if ((!ItemUtil.isSimilar(matrixItem, craftItem)) || (matrixItem.getAmount() != craftItem.getAmount()))
+			if ((!ItemUtil.isSimilar(matrixItem, craftItem)) || (matrixItem.getAmount() > craftItem.getAmount()))
 				return false;
 		}
 
