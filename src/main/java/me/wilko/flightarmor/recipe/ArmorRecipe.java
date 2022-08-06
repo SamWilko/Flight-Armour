@@ -66,7 +66,7 @@ public class ArmorRecipe {
 				ItemStack matrixItem = matrix[index];
 				ItemStack recipeItem = recipe.getMatrix().get(index);
 
-				// Check the two items are the same and the matrix item amount is greater than or equalto recipe item amount
+				// Check the two items are the same and the matrix item amount is greater than or equal to recipe item amount
 				if ((!ItemUtil.isSimilar(matrixItem, recipeItem)) || matrixItem.getAmount() < recipeItem.getAmount())
 					continue RECIPE;
 			}

@@ -4,6 +4,7 @@ import me.wilko.flightarmor.model.ArmorPiece;
 import me.wilko.flightarmor.model.ArmorSet;
 import me.wilko.flightarmor.recipe.ArmorRecipe;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.ItemStack;
 import org.mineacademy.fo.menu.model.ItemCreator;
 import org.mineacademy.fo.remain.CompMaterial;
@@ -82,11 +83,32 @@ public class SetLoader extends YamlStaticConfig {
 				}
 
 				recipe.setIngredient('A', armorIngredient);
-
 				recipe.setMatrix();
 
 				// Add recipe
 				ArmorRecipe.addRecipe(recipe);
+			}
+
+			// Adds full set attributes
+			setPathPrefix(tier == ArmorSet.Tier.ONE ? "tier-one" : "tier-two");
+
+			for (String key : getMap("full-set-attributes").keySet()) {
+				setPathPrefix((tier == ArmorSet.Tier.ONE ? "tier-one" : "tier-two") + ".full-set-attributes");
+
+				try {
+					Attribute.valueOf(key.toUpperCase().replace("-", "_"));
+				} catch (Exception ex) {
+					continue;
+				}
+
+				double val;
+				try {
+					val = Double.parseDouble(getString(key));
+				} catch (Exception ex) {
+					continue;
+				}
+
+				armorSet.addAttribute(key.toUpperCase().replace("-", "_"), val);
 			}
 
 			if (tier == ArmorSet.Tier.ONE)

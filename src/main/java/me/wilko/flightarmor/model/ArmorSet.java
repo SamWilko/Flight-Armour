@@ -2,11 +2,17 @@ package me.wilko.flightarmor.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.wilko.flightarmor.settings.PlayerData;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.mineacademy.fo.Common;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArmorSet {
 
@@ -21,6 +27,8 @@ public class ArmorSet {
 	private ArmorPiece chestplate;
 	private ArmorPiece leggings;
 	private ArmorPiece boots;
+
+	private final Map<String, Double> attributes = new HashMap<>();
 
 	@Getter
 	private final Tier tier;
@@ -71,6 +79,42 @@ public class ArmorSet {
 				leggings,
 				boots
 		);
+	}
+
+	public void addAttribute(String enumKey, double val) {
+		this.attributes.put(enumKey, val);
+	}
+
+	public void setAttributesFor(Player player) {
+
+		PlayerData data = PlayerData.lookup(player);
+
+		Map<String, Double> oldAttributes = new HashMap<>();
+
+		for (Map.Entry<String, Double> entry : attributes.entrySet()) {
+
+			Attribute attribute = Attribute.valueOf(entry.getKey());
+
+			try {
+				oldAttributes.put(attribute.name(), player.getAttribute(attribute).getBaseValue());
+				player.getAttribute(attribute).setBaseValue(entry.getValue());
+			} catch (NullPointerException ex) {
+				Common.log("Player doesn't have attribute '" + attribute.name() + "'");
+			}
+		}
+
+		data.setOldAttributes(oldAttributes);
+	}
+
+	public static void resetAttributes(Player player) {
+
+		PlayerData data = PlayerData.lookup(player);
+
+		for (Map.Entry<String, Object> entry : data.getOldAttributes().entrySet()) {
+			Attribute attribute = Attribute.valueOf(entry.getKey());
+
+			player.getAttribute(attribute).setBaseValue((double) entry.getValue());
+		}
 	}
 
 	/**

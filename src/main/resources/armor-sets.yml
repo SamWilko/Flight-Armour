@@ -40,6 +40,15 @@ tier-one:
       S:
         material: nether_star
         amount: 2
+  
+  full-set-attributes:
+    generic-armor: 2
+    generic-armor-toughness: 2
+    generic-attack-damage: 0.8
+    generic-attack-speed: 2
+    generic-knockback-resistance: 0
+    generic-max-health: 16
+    generic-movement-speed: 0.08
 
 tier-two:
 
@@ -84,3 +93,11 @@ tier-two:
         material: nether_star
         amount: 8
 
+  full-set-attributes:
+    generic-armor: 2
+    generic-armor-toughness: 2
+    generic-attack-damage: 0.8
+    generic-attack-speed: 2
+    generic-knockback-resistance: 0
+    generic-max-health: 16
+    generic-movement-speed: 0.08

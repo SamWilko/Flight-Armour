@@ -8,10 +8,18 @@ api-version: 1.13
 libraries:
   - org.openjdk.nashorn:nashorn-core:15.4
 
-softdepend: [ AuthMe, BanManager, BungeeChatAPI, CMI, DiscordSRV, Factions, Feudal, ItemsAdder, Essentials, LegacyFactions, Lands, LuckPerms, Multiverse-Core, MVdWPlaceholderAPI, MythicMobs, mcMMO, Nicky, PlaceholderAPI, ProtocolLib, SimpleClans, Towny, TownyChat, Vault, WorldEdit ]
+loadbefore: [ Essentials ]
+
+softdepend: [ AuthMe, BanManager, BungeeChatAPI, CMI, DiscordSRV, Factions, Feudal, ItemsAdder, LegacyFactions, Lands, LuckPerms, Multiverse-Core, MVdWPlaceholderAPI, MythicMobs, mcMMO, Nicky, PlaceholderAPI, ProtocolLib, SimpleClans, Towny, TownyChat, Vault, WorldEdit ]
 
 commands:
 
 permissions:
   flightarmor.getset:
     default: op
+  flightarmor.craft.1:
+    default: op
+  flightarmor.craft.2:
+    default: op
+  flightarmor.flyspeed:
+    default: true

@@ -3,6 +3,8 @@ package me.wilko.flightarmor.listener;
 import me.wilko.flightarmor.model.ArmorPiece;
 import me.wilko.flightarmor.model.ArmorSet;
 import me.wilko.flightarmor.recipe.ArmorRecipe;
+import me.wilko.flightarmor.settings.PlayerData;
+import me.wilko.flightarmor.settings.Settings;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,11 +14,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.Nullable;
 import org.mineacademy.fo.Common;
+import org.mineacademy.fo.PlayerUtil;
 import org.mineacademy.fo.annotation.AutoRegister;
 import org.mineacademy.fo.menu.model.ItemCreator;
 
@@ -32,6 +36,17 @@ public final class PlayerListener implements Listener {
 		ArmorRecipe recipe = ArmorRecipe.findMatching(event.getInventory().getMatrix());
 
 		if (recipe == null)
+			return;
+
+		Player player = (Player) event.getView().getPlayer();
+
+		ArmorPiece resultPiece = ArmorPiece.match(recipe.getResult());
+		ArmorSet.Tier pieceTier = resultPiece.getBelongingSet().getTier();
+
+		if (pieceTier == ArmorSet.Tier.ONE && !PlayerUtil.hasPerm(player, "flightarmor.craft.1"))
+			return;
+
+		if (pieceTier == ArmorSet.Tier.TWO && !PlayerUtil.hasPerm(player, "flightarmor.craft.2"))
 			return;
 
 		event.getInventory().setResult(recipe.getResult());
@@ -100,15 +115,25 @@ public final class PlayerListener implements Listener {
 				// Player is wearing a full set
 				if (set != null) {
 
+					PlayerData data = PlayerData.lookup(player);
+
 					// Allow flight
 					player.setAllowFlight(true);
 					player.setFlying(true);
+					set.setAttributesFor(player);
+
+					if (set.getTier() == ArmorSet.Tier.ONE)
+						player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+					else
+						player.setFlySpeed((float) data.getFlySpeed());
 
 				} else {
 
 					// Disallow flight
 					player.setFlying(false);
 					player.setAllowFlight(false);
+
+					ArmorSet.resetAttributes(player);
 				}
 			});
 		}
@@ -125,9 +150,45 @@ public final class PlayerListener implements Listener {
 			if (piece == null)
 				return;
 
-			player.setAllowFlight(true);
-			player.setFlying(true);
+			Common.runLater(1, () -> {
+
+				ArmorSet set = ArmorSet.getSet(player.getInventory().getArmorContents());
+
+				if (set == null)
+					return;
+
+				PlayerData data = PlayerData.lookup(player);
+
+				player.setAllowFlight(true);
+				player.setFlying(true);
+				set.setAttributesFor(player);
+
+				if (set.getTier() == ArmorSet.Tier.ONE)
+					player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+				else
+					player.setFlySpeed((float) data.getFlySpeed());
+			});
 		}
+	}
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+
+		PlayerData data = PlayerData.lookup(player);
+
+		ArmorSet set = ArmorSet.getSet(player.getInventory().getArmorContents());
+
+		if (set == null)
+			return;
+
+		player.setAllowFlight(true);
+		set.setAttributesFor(player);
+
+		if (set.getTier() == ArmorSet.Tier.ONE)
+			player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+		else
+			player.setFlySpeed((float) data.getFlySpeed());
 	}
 
 	private boolean isArmorPiece(@Nullable ItemStack item) {

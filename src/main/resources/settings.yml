@@ -1,4 +1,12 @@
 hide-tags: true
 
+# The speed that players wearing tier 1 armor will fly at
+# Fly speed is a scale from 1 (normal) to 10 (very fast)
+default-fly-speed: 1
+
+# Max fly speed settable by a player wearing tier 2 armor
+# Fly speed is a scale from 1 (normal) to 10 (very fast)
+max-fly-speed: 10
+
 # Do not edit this
 Version: 1
