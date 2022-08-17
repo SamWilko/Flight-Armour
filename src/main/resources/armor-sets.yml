@@ -7,24 +7,32 @@ tier-one:
     lore:
       - "&9This is a helmet"
       - "&9It protects the head!"
+    attributes:
+      generic-armor: 1
 
   chestplate:
     name: "&bTier 1 Chestplate"
     lore:
       - "&9This is a chestplate"
       - "&9It protects the torso!"
+    attributes:
+      generic-armor: 1
 
   leggings:
     name: "&bTier 1 Leggings"
     lore:
       - "&9These are leggings"
       - "&9They protect the legs!"
+    attributes:
+      generic-armor: 1
 
   boots:
     name: "&bTier 1 Boots"
     lore:
       - "&9These are boots"
       - "&9They protect the feet!"
+    attributes:
+      generic-armor: 1
 
   recipe:
 
@@ -42,11 +50,8 @@ tier-one:
         amount: 2
   
   full-set-attributes:
-    generic-armor: 2
-    generic-armor-toughness: 2
     generic-attack-damage: 0.8
     generic-attack-speed: 2
-    generic-knockback-resistance: 0
     generic-max-health: 16
     generic-movement-speed: 0.08
 
@@ -59,24 +64,32 @@ tier-two:
     lore:
       - "&9This is a helmet"
       - "&9It protects the head!"
+    attributes:
+      generic-armor: 1
 
   chestplate:
     name: "&bTier 2 Chestplate"
     lore:
       - "&9This is a chestplate"
       - "&9It protects the torso!"
+    attributes:
+      generic-armor: 1
 
   leggings:
     name: "&bTier 2 Leggings"
     lore:
       - "&9These are leggings"
       - "&9They protect the legs!"
+    attributes:
+      generic-armor: 1
 
   boots:
     name: "&bTier 2 Boots"
     lore:
       - "&9These are boots"
       - "&9They protect the feet!"
+    attributes:
+      generic-armor: 1
 
   recipe:
 
@@ -94,10 +107,7 @@ tier-two:
         amount: 8
 
   full-set-attributes:
-    generic-armor: 2
-    generic-armor-toughness: 2
     generic-attack-damage: 0.8
     generic-attack-speed: 2
-    generic-knockback-resistance: 0
     generic-max-health: 16
     generic-movement-speed: 0.08

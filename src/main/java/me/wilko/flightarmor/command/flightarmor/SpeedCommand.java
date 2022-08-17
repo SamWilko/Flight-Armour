@@ -35,25 +35,30 @@ public class SpeedCommand extends SimpleSubCommand {
 			return;
 		}
 
-		int speed;
+		float speed;
 		try {
-			speed = Integer.parseInt(args[0]);
+			speed = Float.parseFloat(args[0]);
 
-			if (speed < 1 || speed > Settings.MAX_SPEED) {
+			// Checks that the speed is in the valid range
+			if (speed < 0.5 || speed > Settings.MAX_SPEED) {
 				Common.tellNoPrefix(getPlayer(), INVALID_NUMBER);
 				return;
 			}
 
+			// Given speed is not a number
 		} catch (Exception ex) {
 			Common.tellNoPrefix(getPlayer(), INVALID_NUMBER);
 			return;
 		}
 
-		getPlayer().setFlySpeed((float) speed / 10f);
+		// Sets fly speed of the player
+		getPlayer().setFlySpeed(speed / 10f);
 
+		// Saves their flight speed in their data
 		PlayerData data = PlayerData.lookup(getPlayer());
 		data.setFlySpeed(getPlayer().getFlySpeed());
 
+		// Sends them a success message
 		Common.tellNoPrefix(getPlayer(), SET_SPEED.replace("{speed}", String.valueOf(speed)));
 	}
 
@@ -62,6 +67,8 @@ public class SpeedCommand extends SimpleSubCommand {
 		if (args.length == 1) {
 
 			List<String> options = new ArrayList<>();
+
+			options.add("0.5");
 
 			for (int i = 1; i <= Settings.MAX_SPEED; i++) {
 				options.add(String.valueOf(i));

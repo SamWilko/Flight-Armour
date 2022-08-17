@@ -6,11 +6,13 @@ import me.wilko.flightarmor.recipe.ArmorRecipe;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.ItemStack;
+import org.mineacademy.fo.Common;
 import org.mineacademy.fo.menu.model.ItemCreator;
 import org.mineacademy.fo.remain.CompMaterial;
 import org.mineacademy.fo.settings.YamlStaticConfig;
 
 import java.util.List;
+import java.util.Map;
 
 public class SetLoader extends YamlStaticConfig {
 
@@ -46,6 +48,35 @@ public class SetLoader extends YamlStaticConfig {
 						getStringList("lore"),
 						glowing
 				);
+
+				// Adds attributes
+				for (Map.Entry<String, Object> entry : getMap("attributes").entrySet()) {
+
+					String attrString = entry.getKey().toUpperCase().replace("-", "_");
+
+					// Check is valid attribute
+					try {
+						Attribute.valueOf(attrString);
+					} catch (Exception ex) {
+						Common.warning("(armor-sets.yml) " + getPathPrefix() + ".attributes: '" + entry.getKey() + "' is an invalid attribute ...skipping");
+						continue;
+					}
+
+					// Check if value is valid
+					double val;
+					try {
+						val = (double) entry.getValue();
+					} catch (Exception ex) {
+						try {
+							val = (double) (int) entry.getValue();
+						} catch (Exception ex2) {
+							Common.warning("(armor-sets.yml) " + getPathPrefix() + ".attributes: '" + entry.getValue() + "' is an invalid number ...skipping");
+							continue;
+						}
+					}
+
+					piece.addAttribute(attrString, val);
+				}
 
 				// Register the piece in it's parent set
 				armorSet.set(type, piece);

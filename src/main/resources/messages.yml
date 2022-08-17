@@ -1,4 +1,4 @@
 flyspeed-command:
   cannot-use: "&8[&c!&8]&c You cannot use this command!"
-  invalid-number: "&8[&c!&8]&c Speed must be a number between 1 and {max-speed}"
+  invalid-number: "&8[&c!&8]&c Speed must be a number between 0.5 and {max-speed}"
   set-speed: "&8[&ai&8]&a Set speed to &b{speed}"

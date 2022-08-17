@@ -6,38 +6,38 @@ import org.mineacademy.fo.settings.SimpleSettings;
 public final class Settings extends SimpleSettings {
 
 	public static Boolean HIDE_TAGS;
-	public static Integer MAX_SPEED;
-	public static Integer DEFAULT_SPEED;
+	public static Double MAX_SPEED;
+	public static Double DEFAULT_SPEED;
 
 	private static void init() {
 		HIDE_TAGS = getBoolean("hide-tags");
 
 		// Max fly speed for tier 2 armor
 
-		int maxSpeed = 10;
+		double maxSpeed = 10;
 		try {
-			maxSpeed = Integer.parseInt(getString("max-fly-speed"));
+			maxSpeed = Double.parseDouble(getString("max-fly-speed"));
 
-			if (maxSpeed < 1 || maxSpeed > 10) {
+			if (maxSpeed < 0.5 || maxSpeed > 10) {
 				maxSpeed = 10;
-				Common.warning("(settings.yml) max-fly-speed must be at least 1, or lower than or equal to 10");
+				Common.warning("(settings.yml) max-fly-speed must be at least 0.5, or lower than or equal to 10");
 			}
 		} catch (Exception ex) {
-			Common.warning("(settings.yml) max-fly-speed must be an integer between 1 and 10");
+			Common.warning("(settings.yml) max-fly-speed must be a number between 0.5 and 10");
 		}
 
 		MAX_SPEED = maxSpeed;
 
-		int defaultSpeed = 1;
+		double defaultSpeed = 1;
 		try {
-			defaultSpeed = Integer.parseInt(getString("default-fly-speed"));
+			defaultSpeed = Double.parseDouble(getString("default-fly-speed"));
 
-			if (defaultSpeed < 1 || defaultSpeed > 10) {
+			if (defaultSpeed < 0.5 || defaultSpeed > 10) {
 				defaultSpeed = 1;
-				Common.warning("(settings.yml) default-fly-speed must be at least 1, or lower than or equal to 10");
+				Common.warning("(settings.yml) default-fly-speed must be at least 0.5, or lower than or equal to 10");
 			}
 		} catch (Exception ex) {
-			Common.warning("(settings.yml) default-fly-speed must be an integer between 1 and 10");
+			Common.warning("(settings.yml) default-fly-speed must be an integer between 0.5 and 10");
 		}
 
 		DEFAULT_SPEED = defaultSpeed;

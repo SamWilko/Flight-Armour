@@ -123,7 +123,7 @@ public final class PlayerListener implements Listener {
 					set.setAttributesFor(player);
 
 					if (set.getTier() == ArmorSet.Tier.ONE)
-						player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+						player.setFlySpeed((float) (Settings.DEFAULT_SPEED / 10f));
 					else
 						player.setFlySpeed((float) data.getFlySpeed());
 
@@ -164,7 +164,7 @@ public final class PlayerListener implements Listener {
 				set.setAttributesFor(player);
 
 				if (set.getTier() == ArmorSet.Tier.ONE)
-					player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+					player.setFlySpeed((float) (Settings.DEFAULT_SPEED / 10f));
 				else
 					player.setFlySpeed((float) data.getFlySpeed());
 			});
@@ -174,19 +174,21 @@ public final class PlayerListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-
 		PlayerData data = PlayerData.lookup(player);
 
+		// Gets the set they are wearing
 		ArmorSet set = ArmorSet.getSet(player.getInventory().getArmorContents());
 
 		if (set == null)
 			return;
 
+		// Allow flight and set attributes
 		player.setAllowFlight(true);
 		set.setAttributesFor(player);
 
+		// Set flight speed
 		if (set.getTier() == ArmorSet.Tier.ONE)
-			player.setFlySpeed(Settings.DEFAULT_SPEED / 10f);
+			player.setFlySpeed((float) (Settings.DEFAULT_SPEED / 10f));
 		else
 			player.setFlySpeed((float) data.getFlySpeed());
 	}
