@@ -7,11 +7,12 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mineacademy.fo.Common;
-import org.mineacademy.fo.ItemUtil;
 import org.mineacademy.fo.menu.model.ItemCreator;
 import org.mineacademy.fo.remain.CompMaterial;
+import org.mineacademy.fo.remain.CompMetadata;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class ArmorPiece {
 	private final Type type;
 	private final String name;
+	private final Integer modelData;
 	private final List<String> lore;
 	private final boolean glow;
 	private final Map<String, Double> attributes = new HashMap<>();
@@ -29,9 +31,10 @@ public class ArmorPiece {
 	private ArmorSet belongingSet;
 
 
-	public ArmorPiece(Type type, String name, List<String> lore, boolean glow) {
+	public ArmorPiece(Type type, String name, Integer modelData, List<String> lore, boolean glow) {
 		this.type = type;
 		this.name = name;
+		this.modelData = modelData;
 		this.lore = lore;
 		this.glow = glow;
 	}
@@ -48,10 +51,12 @@ public class ArmorPiece {
 							name,
 							lore
 					).glow(glow)
+					.modelData(modelData)
 					.hideTags(Settings.HIDE_TAGS)
 					.unbreakable(true)
 					.make();
 
+			armor = CompMetadata.setMetadata(armor, "tier", belongingSet.getTier().name());
 			ItemMeta meta = armor.getItemMeta();
 
 			if (meta == null) {
@@ -75,16 +80,44 @@ public class ArmorPiece {
 		}
 	}
 
+	public static boolean isArmorPiece(@NotNull ItemStack item) {
+		org.bukkit.Material material = item.getType();
+
+		return material.name().contains("HELMET") ||
+				material.name().contains("CHESTPLATE") ||
+				material.name().contains("LEGGINGS") ||
+				material.name().contains("BOOTS");
+	}
+
+	public static Type getType(ItemStack item) {
+		String materialName = item.getType().name();
+
+		if (materialName.contains("HELMET"))
+			return Type.HELMET;
+		if (materialName.contains("CHESTPLATE"))
+			return Type.CHESTPLATE;
+		if (materialName.contains("LEGGINGS"))
+			return Type.LEGGINGS;
+		if (materialName.contains("BOOTS"))
+			return Type.BOOTS;
+
+		return null;
+	}
+
+	public static boolean matchTier(@NotNull ItemStack a, @NotNull ItemStack b) {
+		return CompMetadata.getMetadata(a, "tier").equals(CompMetadata.getMetadata(b, "tier"));
+	}
+
 	@Nullable
 	public static ArmorPiece match(@Nullable ItemStack item) {
 
-		for (int tier = 1; tier <= 2; tier++) {
+		if (item == null)
+			return null;
 
-			for (ArmorPiece piece : tier == 1 ? ArmorSet.getFirstTier().getAllPieces() : ArmorSet.getSecondTier().getAllPieces()) {
+		if (CompMetadata.hasMetadata(item, "tier")) {
+			ArmorSet.Tier tier = ArmorSet.Tier.valueOf(CompMetadata.getMetadata(item, "tier"));
 
-				if (ItemUtil.isSimilar(item, piece.build()))
-					return piece;
-			}
+			return ArmorSet.getPiece(tier == ArmorSet.Tier.ONE ? ArmorSet.getFirstTier() : ArmorSet.getSecondTier(), ArmorPiece.getType(item));
 		}
 
 		return null;

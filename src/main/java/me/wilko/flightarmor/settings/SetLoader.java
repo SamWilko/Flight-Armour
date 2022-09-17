@@ -45,6 +45,7 @@ public class SetLoader extends YamlStaticConfig {
 				ArmorPiece piece = new ArmorPiece(
 						type,
 						getString("name"),
+						getInteger("custom-model-data"),
 						getStringList("lore"),
 						glowing
 				);

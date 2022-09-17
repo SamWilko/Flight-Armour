@@ -1,13 +1,11 @@
 package me.wilko.flightarmor.settings;
 
 import lombok.Getter;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.mineacademy.fo.collection.SerializedMap;
 import org.mineacademy.fo.settings.YamlConfig;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerData extends YamlConfig {
 
@@ -20,7 +18,7 @@ public class PlayerData extends YamlConfig {
 	private double flySpeed = 0.1D;
 
 	@Getter
-	private SerializedMap oldAttributes = new SerializedMap();
+	private List<Attribute> oldAttributes;
 
 	public PlayerData(UUID uuid) {
 		this.uuid = uuid;
@@ -30,14 +28,43 @@ public class PlayerData extends YamlConfig {
 
 	@Override
 	protected void onLoad() {
+		setPathPrefix(null);
+
 		this.flySpeed = getDouble("fly-speed", 0.1D);
-		this.oldAttributes = getMap("old-attributes");
+
+		List<Attribute> attributes = new ArrayList<>();
+		for (String attrName : getMap("old-attributes").keySet()) {
+			setPathPrefix("old-attributes." + attrName);
+
+			org.bukkit.attribute.Attribute bukkitAttr = org.bukkit.attribute.Attribute.valueOf(attrName);
+			double baseVal = getDouble("base-val");
+
+			List<AttributeModifier> modifiers = new ArrayList<>();
+			for (String modifierName : getMap("modifiers").keySet()) {
+				modifiers.add(AttributeModifier.deserialize(getMap(modifierName).asMap()));
+			}
+
+			attributes.add(new Attribute(bukkitAttr, baseVal, modifiers));
+		}
+
+		this.oldAttributes = attributes;
 	}
 
 	@Override
 	protected void onSave() {
 		set("fly-speed", this.flySpeed);
-		set("old-attributes", this.oldAttributes);
+
+		for (Attribute attribute : this.oldAttributes) {
+
+			set("old-attributes." + attribute.getBukkitAttr().name() + ".base-val", attribute.getBaseVal());
+
+			List<Map<String, Object>> modifierMap = new ArrayList<>();
+			for (AttributeModifier modifier : attribute.getModifiers()) {
+				modifierMap.add(modifier.serialize());
+			}
+
+			set("old-attributes." + attribute.getBukkitAttr().name() + ".modifiers", modifierMap);
+		}
 	}
 
 	public void setFlySpeed(double speed) {
@@ -46,12 +73,8 @@ public class PlayerData extends YamlConfig {
 		save();
 	}
 
-	public void setOldAttributes(Map<String, Double> attributes) {
-		this.oldAttributes = new SerializedMap();
-
-		for (Map.Entry<String, Double> entry : attributes.entrySet()) {
-			this.oldAttributes.put(entry.getKey(), entry.getValue());
-		}
+	public void setOldAttributes(List<Attribute> attributes) {
+		this.oldAttributes = attributes;
 
 		save();
 	}

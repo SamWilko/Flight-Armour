@@ -14,5 +14,6 @@ public final class FlightArmorCommandGroup extends SimpleCommandGroup {
 	protected void registerSubcommands() {
 		registerSubcommand(new GetSetCommand(this));
 		registerSubcommand(new SpeedCommand(this));
+		registerSubcommand(new ReloadCommand(this));
 	}
 }

@@ -4,15 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import me.wilko.flightarmor.settings.PlayerData;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import org.mineacademy.fo.Common;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ArmorSet {
 
@@ -89,18 +87,22 @@ public class ArmorSet {
 
 		PlayerData data = PlayerData.lookup(player);
 
-		Map<String, Double> oldAttributes = new HashMap<>();
+		List<me.wilko.flightarmor.settings.Attribute> oldAttributes = new ArrayList<>();
 
 		for (Map.Entry<String, Double> entry : attributes.entrySet()) {
 
-			Attribute attribute = Attribute.valueOf(entry.getKey());
+			Attribute bukkitAttr = Attribute.valueOf(entry.getKey());
+			AttributeInstance bukkitAttrInstance = player.getAttribute(bukkitAttr);
 
-			try {
-				oldAttributes.put(attribute.name(), player.getAttribute(attribute).getBaseValue());
-				player.getAttribute(attribute).setBaseValue(entry.getValue());
-			} catch (NullPointerException ex) {
-				Common.log("Player doesn't have attribute '" + attribute.name() + "'");
-			}
+			// Player does not have this attribute
+			if (bukkitAttrInstance == null)
+				continue;
+
+			// Saves the previous value of the attribute
+			oldAttributes.add(new me.wilko.flightarmor.settings.Attribute(bukkitAttrInstance.getAttribute(), bukkitAttrInstance.getBaseValue(), new ArrayList<>(bukkitAttrInstance.getModifiers())));
+
+			// Changes its base value
+			player.getAttribute(bukkitAttr).setBaseValue(entry.getValue());
 		}
 
 		data.setOldAttributes(oldAttributes);
@@ -110,10 +112,24 @@ public class ArmorSet {
 
 		PlayerData data = PlayerData.lookup(player);
 
-		for (Map.Entry<String, Object> entry : data.getOldAttributes().entrySet()) {
-			Attribute attribute = Attribute.valueOf(entry.getKey());
+		for (me.wilko.flightarmor.settings.Attribute attribute : data.getOldAttributes()) {
 
-			player.getAttribute(attribute).setBaseValue((double) entry.getValue());
+			// Sets base value
+			player.getAttribute(attribute.getBukkitAttr()).setBaseValue(attribute.getBaseVal());
+
+			for (AttributeModifier modifier : player.getAttribute(attribute.getBukkitAttr()).getModifiers()) {
+				for (AttributeModifier oldModifier : attribute.getModifiers()) {
+
+					if (modifier.getName().equals(oldModifier.getName())) {
+
+						// Remove current modifier
+						player.getAttribute(attribute.getBukkitAttr()).removeModifier(modifier);
+
+						// Add old one
+						player.getAttribute(attribute.getBukkitAttr()).addModifier(oldModifier);
+					}
+				}
+			}
 		}
 	}
 

@@ -4,6 +4,7 @@ tier-one:
 
   helmet:
     name: "&bTier 1 Helmet"
+    custom-model-data: 0
     lore:
       - "&9This is a helmet"
       - "&9It protects the head!"
@@ -12,6 +13,7 @@ tier-one:
 
   chestplate:
     name: "&bTier 1 Chestplate"
+    custom-model-data: 0
     lore:
       - "&9This is a chestplate"
       - "&9It protects the torso!"
@@ -20,6 +22,7 @@ tier-one:
 
   leggings:
     name: "&bTier 1 Leggings"
+    custom-model-data: 0
     lore:
       - "&9These are leggings"
       - "&9They protect the legs!"
@@ -28,6 +31,7 @@ tier-one:
 
   boots:
     name: "&bTier 1 Boots"
+    custom-model-data: 0
     lore:
       - "&9These are boots"
       - "&9They protect the feet!"
@@ -61,6 +65,7 @@ tier-two:
 
   helmet:
     name: "&bTier 2 Helmet"
+    custom-model-data: 0
     lore:
       - "&9This is a helmet"
       - "&9It protects the head!"
@@ -69,6 +74,7 @@ tier-two:
 
   chestplate:
     name: "&bTier 2 Chestplate"
+    custom-model-data: 0
     lore:
       - "&9This is a chestplate"
       - "&9It protects the torso!"
@@ -77,6 +83,7 @@ tier-two:
 
   leggings:
     name: "&bTier 2 Leggings"
+    custom-model-data: 0
     lore:
       - "&9These are leggings"
       - "&9They protect the legs!"
@@ -85,6 +92,7 @@ tier-two:
 
   boots:
     name: "&bTier 2 Boots"
+    custom-model-data: 0
     lore:
       - "&9These are boots"
       - "&9They protect the feet!"

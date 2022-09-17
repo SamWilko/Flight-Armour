@@ -23,3 +23,5 @@ permissions:
     default: op
   flightarmor.flyspeed:
     default: true
+  flightarmor.reload:
+    default: op

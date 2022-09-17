@@ -3,12 +3,9 @@ package me.wilko.flightarmor.recipe;
 import lombok.Data;
 import me.wilko.flightarmor.model.ArmorPiece;
 import org.bukkit.inventory.ItemStack;
-import org.mineacademy.fo.ItemUtil;
+import org.mineacademy.fo.remain.CompMetadata;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 public class ArmorRecipe {
@@ -66,8 +63,34 @@ public class ArmorRecipe {
 				ItemStack matrixItem = matrix[index];
 				ItemStack recipeItem = recipe.getMatrix().get(index);
 
-				// Check the two items are the same and the matrix item amount is greater than or equal to recipe item amount
-				if ((!ItemUtil.isSimilar(matrixItem, recipeItem)) || matrixItem.getAmount() < recipeItem.getAmount())
+				if (matrixItem == null)
+					continue RECIPE;
+
+				// if both the items are pieces of armor, check that if they have the tier key, then they are of the same tier
+				if ((ArmorPiece.isArmorPiece(matrixItem) && ArmorPiece.isArmorPiece(recipeItem))) {
+
+					if (ArmorPiece.getType(matrixItem) != ArmorPiece.getType(recipeItem))
+						continue RECIPE;
+
+					if (CompMetadata.hasMetadata(matrixItem, "tier") && CompMetadata.hasMetadata(recipeItem, "tier")) {
+						if (ArmorPiece.matchTier(recipeItem, matrixItem))
+							continue;
+						else
+							continue RECIPE;
+
+					} else if (CompMetadata.hasMetadata(matrixItem, "tier") && !CompMetadata.hasMetadata(recipeItem, "tier"))
+						continue RECIPE;
+					else if (CompMetadata.hasMetadata(recipeItem, "tier") && !CompMetadata.hasMetadata(matrixItem, "tier"))
+						continue RECIPE;
+
+				} else if (ArmorPiece.isArmorPiece(matrixItem) && !ArmorPiece.isArmorPiece(recipeItem))
+					continue RECIPE;
+
+				else if (ArmorPiece.isArmorPiece(recipeItem) && !ArmorPiece.isArmorPiece(matrixItem))
+					continue RECIPE;
+
+				// Check the two items are of the same material and the matrix item amount is greater than or equal to recipe item amount
+				if ((!(matrixItem.getType() == recipeItem.getType())) || matrixItem.getAmount() < recipeItem.getAmount())
 					continue RECIPE;
 			}
 
@@ -82,8 +105,10 @@ public class ArmorRecipe {
 
 		for (ArmorRecipe recipe : RECIPES) {
 
-			if (ItemUtil.isSimilar(recipe.getResult(), piece.build()))
+			if (CompMetadata.hasMetadata(recipe.getResult(), "tier")
+					&& Objects.equals(CompMetadata.getMetadata(recipe.getResult(), "tier"), piece.getBelongingSet().getTier().name()))
 				return recipe;
+
 		}
 
 		return null;
